@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Icon from "@/components/ui/icon";
 import { slides } from "@/components/presentation/slides";
 
@@ -581,6 +581,15 @@ const Index = () => {
 
   const prev = () => setCurrent((c) => Math.max(0, c - 1));
   const next = () => setCurrent((c) => Math.min(slides.length - 1, c + 1));
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") setCurrent((c) => Math.min(slides.length - 1, c + 1));
+      if (e.key === "ArrowLeft" || e.key === "ArrowUp") setCurrent((c) => Math.max(0, c - 1));
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   const slide = slides[current];
 
